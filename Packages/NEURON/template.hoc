@@ -1,0 +1,37 @@
+{load_file("stdrun.hoc")}
+{load_file("nrngui.hoc")}
+{load_file("import3d.hoc")}
+
+
+//=========== MORPHOLOGY ============//
+
+// CELL TEMPLATE //
+
+begintemplate Cell
+public soma, axon, dend, apic         
+create soma[1], axon[1], dend[1], apic[1]
+public all, somatic, axonal, basal, apical
+objref all, somatic, axonal, basal, apical
+proc init() {
+    all = new SectionList()
+    somatic = new SectionList()
+    axonal = new SectionList()
+    basal = new SectionList()
+    apical = new SectionList()
+}
+endtemplate Cell
+
+// LOAD MORPHOLOGY IN FUNCTION //
+
+obfunc mkcell() { localobj import, morph, cell
+    cell = new Cell()
+    morph = new Import3d_Neurolucida3()
+    morph.input($s1)
+    import = new Import3d_GUI(morph, 0)
+    execute("forall delete_section()", cell)
+    import.instantiate(cell)
+    return cell
+}
+
+
+//=========== MORPHOLOGY ============//
